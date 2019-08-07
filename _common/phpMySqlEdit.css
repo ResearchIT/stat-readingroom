@@ -1,0 +1,209 @@
+/* Change extension of this file to *.CSS */
+
+body
+{
+ font: 9pt Arial,Verdana,Sans;
+ link:#000066; alink:#000066; vlink:#000066;
+ style: color:#000066;
+ text-decoration:none;
+}
+
+TABLE
+{
+ border:#CCCCCC 1px solid;
+ border-collapse: collapse;
+ padding: 1px; border-spacing: 1px;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+th
+{
+ border:#FFFFFF 2px solid;
+ padding: 2px;
+ background: #d4d4d4;
+ font: 9pt Arial,Verdana,Sans; font-weight: bold;
+}
+
+td
+{
+ border:#FFFFFF 2px solid;
+ padding: 2px;
+ text-align: left;
+}
+
+hr
+{
+ color:#FFFFFF;
+ border: 2px solid;
+ padding: 2px;
+ margin: 0px;
+ border-top-width: 1px;
+ height: 1px;
+}
+
+a
+{
+ text-decoration:none;
+ color:#000066;
+}
+
+a:hover
+{
+ text-decoration:underline;
+ color:#000066;
+}
+
+input, textarea
+{
+ background:#FFFFFF;
+ border:1px #97B9E6 solid;
+ color: #000000;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+select
+{
+ background-color:#dcdcdc;
+ border:1px #dcdcdc solid;
+ color: #dcdcdc;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+input.pme-add, input.pme-cancel, input.pme-change, input.pme-clear, input.pme-copy, input.pme-delete,
+input.pme-first, input.pme-goto, input.pme-hide, input.pme-last, input.pme-more,
+input.pme-navigation-0, input.pme-navigation-1, input.pme-next, input.pme-prev,
+input.pme-query, input.pme-save, input.pme-search, input.pme-view
+{
+ background:#efefef;
+ border:1px #dcdcdc solid;
+ color: #000066;
+ font: 16pt Arial,Verdana,Sans; text-align: center;
+}
+
+tr.pme-filter, tr.pme-sortinfo, select.pme-filter, select.pme-filter-right-align,
+.pme-clear, .pme-hide, .pme-search
+{
+ background:#e6e6e6;
+ border:1px #dcdcdc solid;
+ color: #000066;
+ font: 9pt Arial,Verdana,Sans; text-align: center;
+}
+
+input.pme-filter,
+input.pme-filter-right-align
+{
+ background:#FFFFFF;
+ border:1px #dcdcdc solid;
+ color: #000066;
+ font: 9pt Arial,Verdana,Sans; text-align: center;
+}
+
+input.pme-input-0,
+input.pme-input-1
+{
+ background:#FFFFFF;
+ border:1px #dcdcdc solid;
+ color: #000000; font: 9pt Arial,Verdana,Sans;
+}
+
+textarea.pme-input-0,
+textarea.pme-input-1
+{
+ background:#FFFFFF;
+ border:1px #dcdcdc solid;
+ color: #000000;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+select.pme-input-0,
+select.pme-input-1
+{
+ background:#fcfcfc;
+ border:1px #dcdcdc solid;
+ color: #000000;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+table.pme-navigation
+{
+ background:#FFFFFF;
+ border:0px;
+ padding: 1px; cellpadding: 0px;
+ border-spacing: 1px;
+ font: 9pt Arial,Verdana,Sans;
+}
+
+tr.pme-navigation
+{
+ background:#FFFFFF;
+ border:0px;
+ padding: 1px; cellpadding: 1px;
+ border-spacing: 0px;
+ cellpadding: 0;
+}
+
+td.pme-cell-0
+{
+ background:#f5f5f5;
+ border-collapse:collapse;
+ font: 9pt Arial,Verdana,Sans; text-align: center;
+}
+
+td.pme-cell-1
+{
+ background:#fafafa;
+ border-collapse:collapse;
+ font: 9pt Arial,Verdana,Sans; text-align: center;
+}
+
+td.pme-key-0, td.pme-key-1
+{
+ background:#dcdcdc;
+ border-collapse:collapse;
+ font: 9pt Arial,Verdana,Sans; font-weight: bold; text-align: left;
+}
+
+td.pme-value-0-right-align, td.pme-value-0,
+td.pme-value-1-right-align, td.pme-value-1
+{
+ background:#f4f4f4;
+ border-collapse:collapse;
+ font: 9pt Arial,Verdana,Sans; text-align: left;
+}
+
+td.pme-help-0-right-align, td.pme-help-0,
+td.pme-help-1-right-align, td.pme-help-1
+{
+ background:#e8e8e8;
+ border-collapse:collapse;
+ font: Arial 10pt; text-align: left;
+}
+
+a.pme-navigation-0, a.pme-navigation-1,
+a.pme-navigation-0:hover, a.pme-navigation-1:hover,
+td.pme-navigation-0, td.pme-navigation-1
+{
+ background:#e6e6e6;
+ border-collapse:collapse;
+ font: 9pt Arial,Verdana,Sans; text-align: center;
+}
+
+td.pme-buttons
+{
+ background:#FFFFFF;
+ border:1px #FFFFFF solid;
+ color: #000066;
+ font: 9pt Arial,Verdana,Sans; text-align: left;
+}
+
+td.pme-message
+{
+ text-align: center;
+ font: 8pt Arial,Verdana,Sans;
+}
+
+td.pme-stats
+{
+ text-align: right;
+ font: 8pt Arial,Verdana,Sans;
+}
