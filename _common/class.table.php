@@ -73,6 +73,11 @@ class Table
     */
     var $fstyles;
 
+    public function __construct()
+    {
+        // Constructor's functionality here, if you have any.
+    }
+
     /**
     * Initializes the class variables.
     *

@@ -35,11 +35,6 @@
 	  original table view (Pass 1).
 */
 
-/*
-    With Ted Peterson patches originally from phpMyEdit.class.fancy.php.
-    Additional modifications to only supply Add option.
-*/
-
 function fhtmlspecialchars($myString) {
   // in PHP 5.4 the default encoding used by htmlspecialchars() was changed.
   return htmlspecialchars($myString, ENT_COMPAT, 'ISO-8859-1', true);
@@ -50,7 +45,7 @@ class phpMyEdit_timer /* {{{ */
 	var $startTime;
 	var $started;
 
-	function __construct($start = true)
+	function phpMyEdit_timer($start = true)
 	{
 		$this->started = false;
 		if ($start) {
@@ -180,11 +175,8 @@ class phpMyEdit
 			'D' => 'delete'
 			);
 	var $default_buttons = array(
-			//'L' => array('<<','<','add','view','change','copy','delete','>','>>','goto','goto_combo'),
-			//'F' => array('<<','<','add','view','change','copy','delete','>','>>','goto','goto_combo'),
-			// Originally changed by Ted Peterson on 2/29/2008.
-			'L' => array('<<','<','add','','','','','>','>>','',''),
-			'F' => array('','','add','','','','','','','',''),
+			'L' => array('<<','<','add','view','change','copy','delete','>','>>','goto','goto_combo'),
+			'F' => array('<<','<','add','view','change','copy','delete','>','>>','goto','goto_combo'),
 			'A' => array('save','more','cancel'),
 			'C' => array('save','more','cancel'),
 			'P' => array('save', 'cancel'),
@@ -1503,8 +1495,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 		if (intval($this->fdd[$k]['trimlen']) > 0 && strlen($value) > $this->fdd[$k]['trimlen']) {
-			//$value = ereg_replace("[\r\n\t ]+",' ',$value);                // !! // original line
-			$value = preg_replace("/[\\r\\n\\t ]+/",' ',$value);
+			$value = ereg_replace("[\r\n\t ]+",' ',$value);                // !! // original line
+			// !! // $value = preg_replace("/[\\r\\n\\t ]+/",' ',$value);  // !! // proposed code. TODO: verify code! http://stackoverflow.com/questions/2443895/ereg-replace-to-preg-replace
 			$value = substr($value, 0, $this->fdd[$k]['trimlen'] - 3).'...';
 		}
 		if (@$this->fdd[$k]['mask']) {
@@ -1603,7 +1595,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if (! is_array($selected)) {
 			$selected = $selected === null ? array() : array((string)$selected);
 		} else {
-			print  "found=".$found. "|multiple=". $multiple. "|selected=". $selected."|(string)key=".(string)$key. "<br>";
 			foreach($selected as $val) $selecte2[]=(string)$val;
 			$selected = $selected2;
 		}
@@ -2004,8 +1995,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			return $this->htmlSubmit('cancel'.$this->page_types[$this->page_type], 'Cancel',
 					$this->getCSSclass('cancel', $position), false);
 		}
-		//if (in_array($name, array('add','view','change','copy','delete'))) {
-		if (in_array($name, array('add','change'))) {
+		if (in_array($name, array('add','view','change','copy','delete'))) {
 			$enabled_fnc = $name.'_enabled';
 			$enabled     = $this->$enabled_fnc();
 			if ($name != 'add' && ! $this->total_recs && strstr('LF', $this->page_type))
@@ -3278,7 +3268,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 	/*
 	 * Class constructor
 	 */
-	function __construct($opts) /* {{{ */
+	function phpMyEdit($opts) /* {{{ */
 	{
 		// Set desirable error reporting level
 		$error_reporting = error_reporting(E_ALL & ~E_NOTICE);
@@ -3332,11 +3322,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		// Creating directory variables
 		$this->dir['root'] = dirname(realpath(__FILE__))
 			. (strlen(dirname(realpath(__FILE__))) > 0 ? '/' : '');
-		//$this->dir['lang'] = $this->dir['root'].'lang/';
-		$this->dir['lang'] = '_common/phpMyEdit-PHP7.0/lang/';
+		$this->dir['lang'] = $this->dir['root'].'lang/';
 		// Creating URL variables
-		//$this->url['images'] = 'images/';
-		$this->url['images'] = '_common/phpMyEdit-PHP7.0/images/';
+		$this->url['images'] = 'images/';
 		isset($opts['url']['images']) && $this->url['images'] = $opts['url']['images'];
 		// CSS classes policy
 		$this->css = @$opts['css'];

@@ -1,0 +1,8 @@
+TODO
+
+* Set up HTTPS and OKTA.
+* Switch style sheet URLs to HTTPS after getting HTTPS working in OpenShift.
+* Point postfix configuration at address for postfix relay container.
+* Remove debugging.
+* Test email sending through relay.
+* Sync final copy of database.
