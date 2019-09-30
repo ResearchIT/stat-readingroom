@@ -1,4 +1,5 @@
 <?php
+
 //
 // db.php - common DB stuff.
 //

@@ -185,7 +185,8 @@ If($_POST['submit']==true) {
 //================================================================================
 //* Start the form layout
 //================================================================================
-//:- Please know what your doing before editing below. Sorry for the stop and start php.. people requested that I use only html for the form..
+//:- Please know what your doing before editing below. Sorry for the stop and 
+//start php.. people requested that I use only html for the form.
 
 print <<<END1
 <script type="text/javascript">
@@ -328,4 +329,3 @@ print <<<END9
 
 END9;
 }
-

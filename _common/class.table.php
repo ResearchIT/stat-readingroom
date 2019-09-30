@@ -1,4 +1,5 @@
 <?php
+
 /*
 *    Table Class
 *
@@ -639,4 +640,5 @@ class Table
 *        LANGUAGE:            PHP
 *        EDITOR:            EditPlus
 */
+
 ?>

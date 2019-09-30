@@ -61,11 +61,11 @@ $opts['navigation'] = 'G';
 
 // Display special page elements
 $opts['display'] = array(
-   'form'  => true,
-   'query' => true,
-   'sort'  => true,
-   'time'  => true,
-   'tabs'  => true
+    'form'  => true,
+    'query' => true,
+    'sort'  => true,
+    'time'  => true,
+    'tabs'  => true
 );
 
 // Set default prefixes for variables
@@ -128,59 +128,59 @@ appear in generated list. Here are some most used field options documented.
 */
 
 $opts['fdd']['Author'] = array(
-  'name'     => 'Author',
-  'select'   => 'T',
-    'textarea' => array(
-    'rows' => 4,
-    'cols' => 64),
-  'maxlen'   => 255,
-  'sort'     => true
+    'name'     => 'Author',
+    'select'   => 'T',
+        'textarea' => array(
+        'rows' => 4,
+        'cols' => 64),
+    'maxlen'   => 255,
+    'sort'     => true
 );
 $opts['fdd']['Title'] = array(
-  'name'     => 'Title',
-  'select'   => 'T',
-    'textarea' => array(
-    'rows' => 4,
-    'cols' => 64),
-  'maxlen'   => 255,
-  'sort'     => true
+    'name'     => 'Title',
+    'select'   => 'T',
+        'textarea' => array(
+        'rows' => 4,
+        'cols' => 64),
+    'maxlen'   => 255,
+    'sort'     => true
 );
 $opts['fdd']['Location'] = array(
-  'name'     => 'Location',
-  'select'   => 'T',
-  'maxlen'   => 45,
-  'sort'     => true
+    'name'     => 'Location',
+    'select'   => 'T',
+    'maxlen'   => 45,
+    'sort'     => true
 );
 $opts['fdd']['Location']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['CheckOutDays'] = array(
-  'name'     => 'CheckOutDays',
-  'select'   => 'T',
-  'maxlen'   => 11,
-  'sort'     => true
+    'name'     => 'CheckOutDays',
+    'select'   => 'T',
+    'maxlen'   => 11,
+    'sort'     => true
 );
 $opts['fdd']['CheckOutDays']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['MS'] = array(
-  'name'     => 'MS',
-  'select'   => 'T',
-  'maxlen'   => 11,
-  'default'  => '0',
-  'sort'     => true
+    'name'     => 'MS',
+    'select'   => 'T',
+    'maxlen'   => 11,
+    'default'  => '0',
+    'sort'     => true
 );
 $opts['fdd']['PhD'] = array(
-  'name'     => 'PhD',
-  'select'   => 'T',
-  'maxlen'   => 11,
-  'default'  => '0',
-  'sort'     => true
+    'name'     => 'PhD',
+    'select'   => 'T',
+    'maxlen'   => 11,
+    'default'  => '0',
+    'sort'     => true
 );
 $opts['fdd']['Borrower'] = array(
-  'name'     => 'Borrower',
-  'select'   => 'T',
-  'default'  => ' NO_USER_BUT_LEAVE_IN',
-  'maxlen'   => 8,
-  'sort'     => true
+    'name'     => 'Borrower',
+    'select'   => 'T',
+    'default'  => ' NO_USER_BUT_LEAVE_IN',
+    'maxlen'   => 8,
+    'sort'     => true
 );
 $opts['fdd']['Borrower']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 $opts['fdd']['Borrower']['values']['description'] = 'name';
@@ -189,40 +189,40 @@ $opts['fdd']['Borrower']['values']['table']   = 'Statdir';
 $opts['fdd']['Borrower']['values']['column']   = 'netid';
 
 $opts['fdd']['DateRequested'] = array(
-  'name'     => 'DateRequested',
-  'select'   => 'T',
-  'maxlen'   => 10,
-  'sort'     => true
+    'name'     => 'DateRequested',
+    'select'   => 'T',
+    'maxlen'   => 10,
+    'sort'     => true
 );
 $opts['fdd']['DateRequested']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['DateCheckedOut'] = array(
-  'name'     => 'DateCheckedOut',
-  'select'   => 'T',
-  'maxlen'   => 10,
-  'sort'     => true
+    'name'     => 'DateCheckedOut',
+    'select'   => 'T',
+    'maxlen'   => 10,
+    'sort'     => true
 );
 $opts['fdd']['DateCheckedOut']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['DateCheckedIn'] = array(
-  'name'     => 'DateCheckedIn',
-  'select'   => 'T',
-  'maxlen'   => 10,
-  'sort'     => true
+    'name'     => 'DateCheckedIn',
+    'select'   => 'T',
+    'maxlen'   => 10,
+    'sort'     => true
 );
 $opts['fdd']['DateCheckedIn']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['DateContacted'] = array(
-  'name'     => 'DateContacted',
-  'select'   => 'T',
-  'maxlen'   => 10,
-  'sort'     => true
+    'name'     => 'DateContacted',
+    'select'   => 'T',
+    'maxlen'   => 10,
+    'sort'     => true
 );
 $opts['fdd']['ContactedID'] = array(
-  'name'     => 'ContactedID',
-  'select'   => 'T',
-  'maxlen'   => 8,
-  'sort'     => true
+    'name'     => 'ContactedID',
+    'select'   => 'T',
+    'maxlen'   => 8,
+    'sort'     => true
 );
 $opts['fdd']['ContactedID']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 // $opts['fdd']['ContactedID']['values']['description'] = 'name';
@@ -232,28 +232,28 @@ $opts['fdd']['ContactedID']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 $opts['fdd']['DateContacted']['sqlw'] = 'IF($val_qas = "", NULL, $val_qas)';
 
 $opts['fdd']['Notes'] = array(
-  'name'     => 'Notes',
-  'select'   => 'T',
-    'textarea' => array(
-    'rows' => 4,
-    'cols' => 64),
-  'maxlen'   => 255,
-  'sort'     => true
+    'name'     => 'Notes',
+    'select'   => 'T',
+        'textarea' => array(
+        'rows' => 4,
+        'cols' => 64),
+    'maxlen'   => 255,
+    'sort'     => true
 );
 
 $opts['fdd']['StaffID'] = array(
-  'name'     => 'StaffID',
-  'select'   => 'T',
-  'maxlen'   => 8,
-  'sort'     => true
+    'name'     => 'StaffID',
+    'select'   => 'T',
+    'maxlen'   => 8,
+    'sort'     => true
 );
 $opts['fdd']['BookID'] = array(
-  'name'     => 'BookID',
-  'select'   => 'T',
-  'options'  => 'AVCPDR', // auto increment
-  'maxlen'   => 11,
-  'default'  => '0',
-  'sort'     => true
+    'name'     => 'BookID',
+    'select'   => 'T',
+    'options'  => 'AVCPDR', // auto increment
+    'maxlen'   => 11,
+    'default'  => '0',
+    'sort'     => true
 );
 // Now important call to phpMyEdit
 # require_once 'phpMyEdit.class.fancy.php';
@@ -262,8 +262,8 @@ new phpMyEdit($opts);
 
 // print "here I am";
 // print_r($opts);
-?>
 
+?>
 
 </body>
 </html>

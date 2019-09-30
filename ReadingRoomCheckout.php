@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set("America/Chicago");
 
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/db.php");

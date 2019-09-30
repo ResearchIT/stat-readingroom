@@ -61,11 +61,11 @@ $opts['navigation'] = 'G';
 
 // Display special page elements
 $opts['display'] = array(
-   'form'  => true,
-   'query' => true,
-   'sort'  => true,
-   'time'  => true,
-   'tabs'  => true
+    'form'  => true,
+    'query' => true,
+    'sort'  => true,
+    'time'  => true,
+    'tabs'  => true
 );
 
 // Set default prefixes for variables
@@ -128,24 +128,24 @@ appear in generated list. Here are some most used field options documented.
 */
 
 $opts['fdd']['Author'] = array(
-  'name'     => 'Author',
-  'select'   => 'T',
-  'maxlen'   => 40,
-  'sort'     => true
+    'name'     => 'Author',
+    'select'   => 'T',
+    'maxlen'   => 40,
+    'sort'     => true
 );
 $opts['fdd']['Quantity'] = array(
-  'name'     => 'Quantity',
-  'select'   => 'T',
-  'maxlen'   => 11,
-  'sort'     => true
+    'name'     => 'Quantity',
+    'select'   => 'T',
+    'maxlen'   => 11,
+    'sort'     => true
 );
 $opts['fdd']['ID'] = array(
-  'name'     => 'ID',
-  'select'   => 'T',
-  'options'  => 'AVCPDR', // auto increment
-  'maxlen'   => 11,
-  'default'  => '0',
-  'sort'     => true
+    'name'     => 'ID',
+    'select'   => 'T',
+    'options'  => 'AVCPDR', // auto increment
+    'maxlen'   => 11,
+    'default'  => '0',
+    'sort'     => true
 );
 
 // Now important call to phpMyEdit
