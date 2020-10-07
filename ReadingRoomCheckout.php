@@ -5,14 +5,31 @@ date_default_timezone_set("America/Chicago");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/db.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/class.table.php");
 
+// PHPMailer: because stock mail() sucks. -jdwhite
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/Exception.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/PHPMailer.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/SMTP.php");
+
+$DEBUG = getenv('DEBUG');
+
 $red   = "<font color=\"#FF0000\">";
 $black = "<font color=\"#000000\">";
 
 // Authenticated user ID.
 //$user = $_SERVER['REMOTE_USER'];
-$user = $_SERVER['uid'];
+$user = $_SERVER['uid']; // Shibboleth provides LDAP attributes.
 
-$user = "mbrekke"; // DEBUG
+if ($DEBUG == true) {
+	$user = "mbrekke";
+
+	print "<BR>DEBUG mode enabled<BR><UL>"
+		."<LI>Forcing auth user={$user}</LI>"
+		."<LI>Despite messages to the contrary, no email will be sent</LI>"
+		."</UL><BR>\n";
+}
 
 $checkOutMachines = array("shepard-gx760.stat.iastate.edu", 
                           "stat-vista.stat.iastate.edu",
@@ -107,9 +124,10 @@ print "<form method=\"post\" action=\""
       .$_SERVER['PHP_SELF']
       ."\">";
 
-if (isset($opts{'email_overdue'})) {
-    emailBooksOverdue($user);
-}
+// This is already done before page generation.
+//if (isset($opts{'email_overdue'})) {
+//    emailBooksOverdue($user);
+//}
 if ($adminUser == 1) {
     adminScreen($opts, $user, $userName);
 }
@@ -599,29 +617,51 @@ function emailBooksOverdue ($user)
     simple_query($sql);
 
     if ($count > 0) {
-        foreach ($overduebooks as $book) {
-            $from = "{$user}@iastate.edu";
-            $to = $book['Borrower']."@iastate.edu";
-            $from = "jdwhite@iastate.edu"; // DEBUG
-            $to = "jdwhite@iastate.edu"; //DEBUG
-            $headers = array(
-                "MIME-Version: 1.0",
-                "Content-type: text/html; charset=iso-8859-1",
-                "From: ${from}",
-                "To: ${to}"
-            );
-            $subject = "Return Overdue Reading Room Book";
-            $message = "Please return \'"
-                      .$book['Title']
-                      ."\' by \'"
-                      .$book['Author']
-                      ."\' because it is overdue.";
 
-            print implode("<br>", $headers)
-                 ."<br>{$message}<br><hr>\n";
-            //mail($to, $subject, $message, implode("\r\n", $headers));
-        }  
-    }
+        foreach ($overduebooks as $book) {
+			$mail = new PHPMailer(true);
+			try {
+				// Server Settings
+				//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
+				$mail->Host			= "mailhub.iastate.edu";
+				$mail->Port			= 25;
+				$mail->SMTPAuth		= false;
+				$mail->isSMTP(); // Send using SMTP.
+
+				// Recipients
+				$mail->setFrom("{$user}@iastate.edu", '');
+				$mail->addAddress($book['Borrower']."@iastate.edu");
+
+				// Content
+				$mail->isHTML(false); // Plain text, please.
+				$mail->Subject = "Return Overdue Reading Room Book";
+				$mail->Body = "Please return \""
+					.$book['Title']
+					."\" by \""
+					.$book['Author']
+					."\" because it is overdue.\n\nThank you.";
+
+				if ($DEBUG == true) {
+					// Separate print statements here so stdout if properly 
+					// flushed between prints.
+					print "<pre>DEBUG mode<BR>";
+					print_r($mail);
+					print "</pre>";
+				} else {
+					//$mail->send();
+				}
+
+				print "Mail sent to ".$book['Borrower']." requesting return of \"".$book['Title']."\".<BR>";
+			} catch (Exception $e) {
+				print "<BR>Message to ".$book['Borrower']." could not be sent: {$mail->ErrorInfo}<BR>";
+			} // try/catch
+
+			if ($DEBUG == true) {
+				return; // DEBUG - send only one mail
+			}
+
+        } // foreach
+    } // ($count > 0)
     //header("Location: $_SERVER[PHP_SELF]?$_SERVER[QUERY_STRING]"); 
 }
 
@@ -775,28 +815,52 @@ function emailRequest($user, $book)
     // Get the name of the requestor.
     $sql = "select name from Statdir where netid = '{$user}'";
     $requestorName = simple_query($sql);
-    
-    $email = "{$user}@iastate.edu";
-    $headers = "MIME-Version: 1.0\r\nFrom:{$user}@iastate.edu>\r\n";
-    $body = $requestorName[0]['name']
-           ." is requesting you return "
-           .$checkedOutBook[0]['Title'];
-    $subject = "Return Reading Room Book";
- 
-    mail($checkedOutBook[0]['Borrower']."@iastate.edu", $subject, $body, $headers);
-    print "Request For <strong>".$checkedOutBook[0]['Title']."</strong> sent<br>";
-}
+
+	$mail = new PHPMailer(true);
+	try {
+		// Server Settings
+		//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
+		$mail->Host			= "mailhub.iastate.edu";
+		$mail->Port			= 25;
+		$mail->SMTPAuth		= false;
+		$mail->isSMTP(); // Send using SMTP.
+
+		// Recipients
+		$mail->setFrom("{$user}@iastate.edu", '');
+		$mail->addAddress($checkedOutBook[0]['Borrower']."@iastate.edu");
+
+		// Content
+		$mail->isHTML(false); // Plain text, please.
+		$mail->Subject = "Return Reading Room Book";
+		$mail->Body = $requestorName[0]['name']
+           ." is requesting you return \""
+           .$checkedOutBook[0]['Title']."\".";
+
+		if ($DEBUG == true) {
+			// Separate print statements here so stdout if properly 
+			// flushed between prints.
+			print "<pre>DEBUG mode<BR>";
+			print_r($mail);
+			print "</pre>";
+		} else {
+			//$mail->send();
+		}
+    	print "Request for <strong>".$checkedOutBook[0]['Title']."</strong> sent.<br>";
+	} catch (Exception $e) {
+		print "<BR>Request could not be sent: {$mail->ErrorInfo}<BR>";
+	} // try/catch
+ }
 
 function checkOutBook($user, $book)
 {
-    print "user = ".$user."<br>"; //DEBUG
+    //print "user = ".$user."<br>"; //DEBUG
     $junk = explode('_', $book);
     $book = $junk[1]; 
-    print "book = ".$book."<br>"; //DEBUG
+    //print "book = ".$book."<br>"; //DEBUG
     $sql = "update ReadingRoomBooks set Borrower = '{$user}', "
           ."DateCheckedOut = CURDATE() where BookID = {$book}";
 
-	print "sql = ".$sql."<br>"; //DEBUG
+	//print "sql = ".$sql."<br>"; //DEBUG
 
     simple_query($sql);   
 

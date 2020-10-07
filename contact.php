@@ -1,4 +1,21 @@
 <?php
+
+// PHPMailer: because stock mail() sucks. -jdwhite
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/Exception.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/PHPMailer.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/SMTP.php");
+
+$DEBUG = getenv('DEBUG');
+
+if ($DEBUG == true) {
+	print "<BR>DEBUG mode enabled<BR><UL>"
+		."<LI>Despite messages to the contrary, no email will be sent</LI>"
+		."</UL><BR>\n";
+}
+
 print <<<END
 <html>
 <script type="text/javascript">
@@ -12,44 +29,36 @@ END;
 
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/db.php");
 
-if (isset($_GET['to']))  
-  $to = $_GET['to']; 
-else
-  $to = $_POST['to'];
-
-if (isset($_GET['id']))  
-  $netid = $_GET['id']; 
-else
-  $netid = $_POST['id'];
-
-if (isset($_GET['BookID']))  
-  $BookID = $_GET['BookID']; 
-else
- $BookID = $_POST['BookID'];
-
-if (isset($_GET['StaffID']))  
-  $StaffID = $_GET['StaffID']; 
-else
-  $StaffID = $_POST['StaffID'];
+$to      = isset($_GET['to']) ? $_GET['to'] : $_POST['to'];
+$netid   = isset($_GET['id']) ? $_GET['id'] : $_POST['id'];
+$BookID  = isset($_GET['BookID']) ? $_GET['BookID'] : $_POST['BookID'];
+$StaffID = isset($_GET['StaffID']) ? $_GET['StaffID'] : $_POST['StaffID'];
 
 if(!empty($BookID)) {
-$Book = $db->get_row("SELECT * FROM ReadingRoomBooks WHERE BookID = '".$BookID."'");
+	$results = simple_query("SELECT * FROM ReadingRoomBooks WHERE BookID = '".$BookID."'");
+	$Book = $results[0];
 }
-if(!empty($StaffID)) {
-$faculty = $db->get_row("SELECT * FROM Statdir WHERE netid = '".$netid."'");
-$to = $faculty->email.",".$StaffID."@iastate.edu";
-}
-if(!empty($StaffID)) {
-$me = $db->get_row("SELECT * FROM Statdir WHERE netid = '$StaffID'");
-$myname = $me->name;
-$name = explode(",",$myname);
-$yourname = $name[1]." ".$name[0];
-$youremail = $me->netid."@iastate.edu";
-$query = "update ReadingRoomBooks set DateContacted = CURDATE(),ContactedID = '".$StaffID."' where BookID = ".$BookID ;
-$db->query($query);
 
-$yourMessageStrip = $Book->Title;
+if(!empty($StaffID)) {
+	$results = simple_query("SELECT * FROM Statdir WHERE netid = '".$netid."'");
+	$faculty = $results[0];
+	$to = $faculty['email'].",".$StaffID."@iastate.edu";
 }
+
+if(!empty($StaffID)) {
+	$results = simple_query("SELECT * FROM Statdir WHERE netid = '$StaffID'");
+	$me = $results[0];
+	$myname = $me['name'];
+	$name = explode(",",$myname);
+	$yourname = $name[1]." ".$name[0];
+	$youremail = $me['netid']."@iastate.edu";
+
+	$query = "update ReadingRoomBooks set DateContacted = CURDATE(),ContactedID = '".$StaffID."' where BookID = ".$BookID ;
+	simple_query($query);
+
+	$yourMessageStrip = $Book['Title'];
+}
+
 // Allowed file types. Please remember to keep the format of this array, add the file extensions you want WITHOUT the dot. Please also be aware that certain file types may cause harm to your website and/or server.
 $allowtypes=array("sas","jmp","zip", "rar", "txt", "doc", "jpg", "png", "gif","odt","xml");
 
@@ -82,12 +91,12 @@ $defaultsubject="No Subject";
 // This is an array of the email subjects the user can pick from. Make sure you keep the format of this array or you will get errors!
 // Look at http://phphq.net/forums/viewtopic.php?p=836 for examples on how to use this feature.
 
-  $subjects[1] = "OVERDUE BOOK";
-  $subjects[2] = "A Message from Your Reading Room";
-  $subjects[3] = "Please return: ".$Book->Title;
-//  $subjects[1] = $Book->Title;
-//  $subjects[2] = "Please return: ".$Book->Title;
-  $use_subject_drop=true;  
+$subjects[1] = "OVERDUE BOOK";
+$subjects[2] = "A Message from Your Reading Room";
+$subjects[3] = "Please return: ".$Book->Title;
+//$subjects[1] = $Book->Title;
+//$subjects[2] = "Please return: ".$Book->Title;
+$use_subject_drop=true;  
 
 // This is an array of the email address for the array above. There must be an email FOR EACH array value specified above. You can have only 1 department if you want.
 //YOU MUST HAVE THE SAME AMMOUNT OF $subjects and $emails or this WILL NOT work correctly! The emails also must be in order for what you specify above!
@@ -110,8 +119,8 @@ function clean($key) {
 		"/cc\:/i",
 		"/to\:/i"
 	);
-  $key=preg_replace($find,"",$key);
-  return $key;
+	$key=preg_replace($find,"",$key);
+	return $key;
 }
 
 // Safe for register_globals=on =)
@@ -123,61 +132,72 @@ $sent_mail=false;
 
 // If they post the form start the mailin'!
 
-If($_POST['submit']==true) {
-  extract($_POST, EXTR_SKIP);
+if($_POST['submit']==true) {
+	extract($_POST, EXTR_SKIP);
 
-	If(trim($yourname)=="") { 
+	if(trim($yourname)=="") { 
 		$error.="You did not enter your name!<br />";
 	}
 	
-	If(trim($youremail)=="") { 
+	if(trim($youremail)=="") { 
 		$error.="You did not enter your email!<br />";
-	} Elseif(!eregi("^([a-z0-9_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,4}\$",$youremail)) {
+	} elseif(!preg_match("/^([a-z0-9_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,4}\$/i",$youremail)  ) {
 		$error.="Invalid email address.<br />";
 	}
 
-	If(trim($emailsubject)=="") {
+	if(trim($emailsubject)=="") {
 		$emailsubject=$defaultsubject;
 	}
 
-	If(trim($yourmessage)=="") { 
+	if(trim($yourmessage)=="") { 
 		$error.="You did not enter a message!<br />";
 	}
-	
 	
 	$boundary=md5(uniqid(time()));
 	
 	//Little bit of security from people forging headers. People are mean sometimes :(
 	
-   $email = explode(",",$to);
-   $myemail = $email[1];
-   $to = $email[0];
-//   print $to.":to<br>.";
-//   print $myemail.":myemail<br>.";
+	$email = explode(",",$to);
+	$myemail = $email[1];
+	$to = $email[0];
 	$yourname=clean($yourname);
 	$yourmessage=clean($yourmessage);
 	$youremail=clean($youremail);
 	
-	//Headers
-	
-	$headers.="From: ".$yourname." <".$youremail.">\n";
-	$headers.="Reply-To: ".$yourname." <".$youremail.">\n";
-	$headers.="CC:".$myemail."\n";
-	$headers.="MIME-Version: 1.0\n";
-	$headers.="X-Mailer: PHP/".phpversion()."\n";
-	$headers.="X-Priority: ".$priority."\n"; 
+	$mail = new PHPMailer(true);
+	try {
+		// Server Settings
+		//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
+		$mail->Host			= "mailhub.iastate.edu";
+		$mail->Port			= 25;
+		$mail->SMTPAuth		= false;
+		$mail->isSMTP(); // Send using SMTP.
 
-	//Message
-	$message.= $yourmessage;
+		// Recipients
+		$mail->setFrom($youremail, "{$yourname}");
+		$mail->addAddress($to);
+		$mail->addCC($myemail);
 
-  //print "<pre>" . $headers . $message . "</pre>";
-	// Send the completed message
-//   print "mail(".$to.",".$emailsubject.",".$message.",".$headers.")) {<br>";
-	If(!mail($to,$emailsubject,$message,$headers)) {
-		Exit("An error has occured, please report this to the website administrator.\n");
-	} Else {
+		// Content
+		$mail->isHTML(false); // Plain text, please.
+		$mail->Subject = $emailsubject;
+		$mail->Body = $yourmessage;
+
+		if ($DEBUG == true) {
+			// Separate print statements here so stdout if properly
+			// flushed between prints.
+			print "DEBUG mode - dumping \$mail object<BR><pre>";
+			print_r($mail);
+			print "</pre>";
+		} else {
+			//$mail->send();
+		}
+		print "Mail sent to {$to}.<BR>";
 		$sent_mail=true;
-	}
+	} catch (Exception $e) {
+		exit("<BR>Message to {$to} could not be sent: {$mail->ErrorInfo}<BR>".
+			"Please report this to the website administrator.<BR>");
+	} // try/catch
 
 } // $_POST
 
@@ -222,21 +242,24 @@ function Checkit(theform) {
 </head>
 <body>
 END1;
-If($display_message) {
-print <<<END2
+
+if($display_message) {
+	print <<<END2
 <div align="center" class="error_message"><b><?=$display_message;?></b></div>
 <br />
 END2;
-}
+
+} // $display_message
 
 if($sent_mail != true) {
-$serverSelf = $_SERVER['PHP_SELF']."?to=".$to;
-print <<<END3
+	$serverSelf = $_SERVER['PHP_SELF']."?to=".$to;
+	print <<<END3
 <form method="post" action=" $serverSelf " enctype="multipart/form-data" name="phmailer" onsubmit="return Checkit(this);">
 <table align="center" class="table" width="100%">
 END3;
+	
 	If($allowattach > 0) {
-print <<<END4
+		print <<<END4
 		<tr>
 			<td width="100%" class="attach_info" colspan="2">
 				<b>Valid Attachment Types:</b> $types <br />
@@ -245,17 +268,18 @@ print <<<END4
 			</td>
 		</tr>
 END4;
-	}
-$yourStrip = stripslashes(htmlspecialchars($yourname));
-$yourStripEmail = stripslashes(htmlspecialchars($youremail));
-//$yourStripEmail = $me->netid."@iastate.edu";
-//$youremail = $me->netid."@iastate.edu";
-//print $yourStripEmail."<br>".$yourStrip."<br>";
-//print $youremail."<br>".$yourname."<br>";
-print <<<END5
+	} // $allowattach > 0
+
+	$yourStrip = stripslashes(htmlspecialchars($yourname));
+	$yourStripEmail = stripslashes(htmlspecialchars($youremail));
+	//$yourStripEmail = $me->netid."@iastate.edu";
+	//$youremail = $me->netid."@iastate.edu";
+	//print $yourStripEmail."<br>".$yourStrip."<br>";
+	//print $youremail."<br>".$yourname."<br>";
+	print <<<END5
 	<tr>
 	  <td>To:</td>
-	  <td><strong> $faculty->name </strong></td>
+	  <td><strong> {$faculty["name"]} </strong></td>
 	</tr>
 	<tr>
 		<td width="30%" class="table_body">Your Name:</td>
@@ -270,39 +294,42 @@ print <<<END5
 		<td width="70%" class="table_body">
 		
 END5;
-			if($use_subject_drop AND is_array($subjects)) {
-print <<<END6
+
+	if($use_subject_drop AND is_array($subjects)) {
+		print <<<END6
 					<select name="emailsubject" size="1">
 END6;
-						 foreach($subjects as $s) {
-							$sSpecial = htmlspecialchars(stripslashes($s));
-print <<<END66
+
+		foreach($subjects as $s) {
+			$sSpecial = htmlspecialchars(stripslashes($s));
+			print <<<END66
 							<option value="$s"> $sSpecial </option>
 END66;
-						}
-print <<<END67
+		} //foreach($subjects as $s)
+
+		print <<<END67
 					</select>
 END67;
+			
+	} else {
 				
-			} else {
-				
-print <<<END7
+		print <<<END7
 				<input name="emailsubject" type="text" size="30" value="$sSpecial" />
 END7;
-				
-			}
-print "	</td> </tr>";
+			
+	} // if($use_subject_drop AND is_array($subjects))
+	print "	</td> </tr>";
 
-for($i=1;$i <= $allowattach; $i++) {
-$yourMessageStrip = stripslashes(htmlspecialchars($yourmessage));
-print <<<END8
+	for($i=1;$i <= $allowattach; $i++) {
+		$yourMessageStrip = stripslashes(htmlspecialchars($yourmessage));
+		print <<<END8
 	<tr>
 		<td width="30%" class="table_body">Attach File:</td>
 		<td width="70%" class="table_body"><input name="attachment[]" type="file" size="30" /></td>
 	</tr>
 END8;
-}
-print <<<END88
+	} // for
+	print <<<END88
 
 	<tr>
 		<td colspan="2" width="100%" class="table_body">Your Message:<span class="error_message">*</span><br />
