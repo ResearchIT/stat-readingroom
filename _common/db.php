@@ -17,12 +17,16 @@ function simple_query(
 	if ($remove_extra_spaces) {
 		$sql = trim(preg_replace('/\s\s+/', ' ', $sql));
 	}
-	//print "sql=".$sql."<br>\n";
+	error_log("sql={$sql}");
 	try {
 		$sth = $pdo->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
 		$sth->execute($params);
-		// Check rowCount before fetch()ing to prevent warnings when 
+		// Checking rowCount before fetch()ing may prevent warnings when 
 		// performing queries that return no rows. -jdwhite
+		// Note: "PHP Warning: PDOStatement::fetch(): SQLSTATE[HY000]: General error"
+		// messages may still appear as rowCount() seems to return non-zero 
+		// after an SQL INSERT statement with MariaDB.
+
 		if ($sth->rowCount() > 0) {
 			for ($i=0; $row = $sth->fetch(); $i++) { $out[$i] = $row; }
 		}
