@@ -648,7 +648,7 @@ function emailBooksOverdue ($user)
 					print_r($mail);
 					print "</pre>";
 				} else {
-					//$mail->send();
+					$mail->send();
 				}
 
 				print "Mail sent to ".$book['Borrower']." requesting return of \"".$book['Title']."\".<BR>";
@@ -843,7 +843,7 @@ function emailRequest($user, $book)
 			print_r($mail);
 			print "</pre>";
 		} else {
-			//$mail->send();
+			$mail->send();
 		}
     	print "Request for <strong>".$checkedOutBook[0]['Title']."</strong> sent.<br>";
 	} catch (Exception $e) {

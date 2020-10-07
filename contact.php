@@ -190,7 +190,7 @@ if($_POST['submit']==true) {
 			print_r($mail);
 			print "</pre>";
 		} else {
-			//$mail->send();
+			$mail->send();
 		}
 		print "Mail sent to {$to}.<BR>";
 		$sent_mail=true;
