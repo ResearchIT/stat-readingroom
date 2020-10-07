@@ -1,7 +1,9 @@
 TODO
 
-* Set up HTTPS and Okta.
-* Switch style sheet URLs to HTTPS after getting HTTPS working in OpenShift.
+* [DONE] Set up HTTPS.
+* Set up Okta auth
+* [NOT NEEDED] Switch style sheet URLs to HTTPS after getting HTTPS working in OpenShift.
+	- http->https redirection takes care of this.
 * [DONE] Remove debugging.
 * [DONE] Test email sending through relay.
 * Sync final copy of database.
