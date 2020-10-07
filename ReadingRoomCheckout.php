@@ -23,7 +23,7 @@ $black = "<font color=\"#000000\">";
 $user = $_SERVER['uid']; // Shibboleth provides LDAP attributes.
 
 if ($DEBUG == true) {
-	$user = "mbrekke";
+	$user = "jdwhite";
 
 	print "<BR>DEBUG mode enabled<BR><UL>"
 		."<LI>Forcing auth user={$user}</LI>"
@@ -579,7 +579,7 @@ function userBooks ($myBooks)
         $bookName = "bookCI_".$book['BookID'];
         $date = explode('-', $book['DateCheckedOut']);
 
-        $returnTime = mktime(12,0,0,$date[1],$date[2],$date[0]) + 24*60*60*$book->CheckOutDays;
+        $returnTime = mktime(12,0,0,intval($date[1]),intval($date[2]),intval($date[0])) + 24*60*60*$book->CheckOutDays;
         $nowTime = date("U");
 
         if ($returnTime < $nowTime) { 
@@ -589,7 +589,7 @@ function userBooks ($myBooks)
         }
         //$content = "<input name='".$bookName."' type='submit'  value='Renew'>";
         $table->SetCellContent($row, 1, $content);
-        $content = date("M-d-Y",mktime(12,0,0,$date[1],$date[2],$date[0]) + 24*60*60*$book['CheckOutDays']);
+        $content = date("M-d-Y",mktime(12,0,0,intval($date[1]),intval($date[2]),intval($date[0])) + 24*60*60*$book['CheckOutDays']);
         $table->SetCellContent($row, 2, $content);
         $table->SetCellContent($row, 3, $book['Title']);
         $table->SetCellContent($row, 4, $book['Author']);
@@ -784,16 +784,16 @@ function renewBook($book, $user)
           ."where BookID = {$book}";
     $tmp = simple_query($sql);
     print $tmp[0]['DateCheckedOut']."<br>";
-    $sql = 'INSERT INTO ReadingRoomHistory "
+    $sql = "INSERT INTO ReadingRoomHistory "
           ."(Borrower,DateCheckedOut,DateCheckedIn,BookID,StaffID) "
-          ."VALUES ("'
+          .'VALUES ("'
           .$tmp[0]['Borrower']
           .'","'
           .$tmp[0]['DateCheckedOut']
           .'",CURDATE(),"'
           .$book
-          .'","'.
-          $user
+          .'","'
+          .$user
           .'")';
 
     simple_query($sql);
@@ -853,14 +853,10 @@ function emailRequest($user, $book)
 
 function checkOutBook($user, $book)
 {
-    //print "user = ".$user."<br>"; //DEBUG
     $junk = explode('_', $book);
     $book = $junk[1]; 
-    //print "book = ".$book."<br>"; //DEBUG
     $sql = "update ReadingRoomBooks set Borrower = '{$user}', "
           ."DateCheckedOut = CURDATE() where BookID = {$book}";
-
-	//print "sql = ".$sql."<br>"; //DEBUG
 
     simple_query($sql);   
 
