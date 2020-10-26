@@ -10,7 +10,7 @@
 // calling page.
 //
 
-include_once($_SERVER['DOCUMENT_ROOT']. "/auth_oidc.php");
+include_once($_SERVER['DOCUMENT_ROOT']. "/_common/auth_oidc.php");
 auth_oidc();
 
 print "You should never see this.";
