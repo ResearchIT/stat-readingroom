@@ -10,6 +10,14 @@
 <h3>Reading Room Search Terms</h3>
 <?php
 
+// Okta auth via OIDC. -jdwhite
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/auth_oidc.php");
+// Authentication check. Authentication will succeed here or die().
+auth_oidc($_SERVER['PHP_SELF']);
+
+// This program doesn't care who's authenticated, effectively limiting
+// access to all active ISU Okta accounts.
+
 /*
  * IMPORTANT NOTE: This generated file contains only a subset of huge amount
  * of options that can be used with phpMyEdit. To get information about all

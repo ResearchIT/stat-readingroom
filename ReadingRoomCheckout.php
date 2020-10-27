@@ -13,36 +13,23 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/Exception
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/PHPMailer.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/PHPMailer-6.1.7/src/SMTP.php");
 
+// Okta auth via OIDC. -jdwhite
+include_once($_SERVER['DOCUMENT_ROOT'] . "/_common/auth_oidc.php");
+// Authentication check. Authentication will succeed here or die().
+auth_oidc($_SERVER['PHP_SELF']);
+// Authenticated user is ISU NetID.
+$user = $_SESSION['netid'];
+
 $DEBUG = getenv('DEBUG');
 
 $red   = "<font color=\"#FF0000\">";
 $black = "<font color=\"#000000\">";
 
-// Authenticated user ID.
-//$user = $_SERVER['REMOTE_USER'];
-$user = $_SERVER['uid']; // Shibboleth provides LDAP attributes.
-
 if ($DEBUG == true) {
-	$user = "jdwhite";
-
 	print "<BR>DEBUG mode enabled<BR><UL>"
-		."<LI>Forcing auth user={$user}</LI>"
 		."<LI>Despite messages to the contrary, no email will be sent</LI>"
 		."</UL><BR>\n";
 }
-
-$checkOutMachines = array("shepard-gx760.stat.iastate.edu", 
-                          "stat-vista.stat.iastate.edu",
-                          "jeanette-gx755.stat.iastate.edu",
-                          "ahoek01.student.iastate.edu",
-                          "rr.stat.iastate.edu",
-                          "falconer.stat.iastate.edu",
-                          "mtjernag-gx760.stat.iastate.edu",
-                          "riker-5040.stat.iastate.edu",
-                          "elandin.stat.iastate.edu",
-                          "eel-gx760.stat.iastate.edu",
-                          "jeanette-gx755.stat.iastate.edu",
-                          "stat-7.stat.iastate.edu");
 
 $sql = "select name from Statdir where netid = '{$user}'";
 $results = simple_query($sql);
@@ -234,8 +221,6 @@ if (!empty($books)) {
        if ($book['Borrower'] == $user) { continue; }
        $row = $table->AddRow();
        $bookName = "book_".$book['BookID'];
-       //$matches = preg_grep("/".gethostbyaddr($_SERVER['REMOTE_ADDR'])."/", $checkOutMachines);
-       //if (empty($book->Borrower) && !empty($matches)) {
        if (empty($book['Borrower'])) {
            $content = "<input name='".$bookName."' type='submit' value='CO'>";
        } elseif (!empty($book['Borrower'])) {
