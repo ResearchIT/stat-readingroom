@@ -20,7 +20,10 @@ auth_oidc($_SERVER['PHP_SELF']);
 // Authenticated user is ISU NetID.
 $user = $_SESSION['netid'];
 
+// If true, enable debugging features.
 $DEBUG = getenv('DEBUG');
+// If not empty, string is a NetID that can also become an admin user.
+$DEBUG_ADMIN = getenv('DEBUG_ADMIN');
 
 $red   = "<font color=\"#FF0000\">";
 $black = "<font color=\"#000000\">";
@@ -40,6 +43,10 @@ $userName = $results[0]['name'];
 $adminUser = 0;
 if (preg_match("/mbrekke|clabuzze|agadilov|riker|mtjernag/", $user)) {
     $adminUser = 1;
+}
+
+if ($DEBUG_ADMIN == $user) {
+	$adminUser = 1;
 }
 
 $date = getdate();
