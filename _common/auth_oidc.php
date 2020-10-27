@@ -54,6 +54,13 @@ function auth_oidc($callback_url = null)
 	$METADATA = http($METADATA_URL);
 
 	//
+	// Error condition.
+	//
+	if (isset($_GET['error'])) {
+		die("Authentication error: ". $_GET['error'] ." - ". $_GET['error_description']);
+	}
+
+	//
 	// LOGOUT. Zorch session variables. Redir to Okta logout endpoint.
 	//
 	if (isset($_GET['logout'])) {
