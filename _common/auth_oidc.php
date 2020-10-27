@@ -141,8 +141,14 @@ function auth_oidc($callback_url = null)
 		// Set some useful session variables.
 		if ($userinfo->sub) {
 			$_SESSION['sub'] = $userinfo->sub;
-			$_SESSION['username'] = $userinfo->preferred_username;
 			$_SESSION['profile'] = $userinfo;
+			$_SESSION['username'] = $userinfo->preferred_username;
+
+			if (preg_match('/^([^@]+)@iastate.edu$/', $userinfo->preferred_username, $matches)) {
+				$_SESSION['netid'] = $matches[1];
+			} else {
+				die("Unable to obtain NetID for authenticated session.");
+			}
 
 			header("Location: ". $_SESSION['POST_AUTH_URL']);
 		    die();
