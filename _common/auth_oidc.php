@@ -57,14 +57,14 @@ function auth_oidc($callback_url = null)
 	// Error condition.
 	//
 	if (isset($_GET['error'])) {
-		die("Authentication error: ". $_GET['error'] ." - ". $_GET['error_description']);
+		die("Authentication error: ".$_GET['error']." - ".$_GET['error_description']);
 	}
 
 	//
 	// LOGOUT. Zorch session variables. Redir to Okta logout endpoint.
 	//
 	if (isset($_GET['logout'])) {
-		error_log("Logging out.");
+		error_log("Logging out. NetID=".$_SESSION['netid']);
 		unset($_SESSION['username']);
 		unset($_SESSION['sub']);
 		$logout_url = $METADATA->end_session_endpoint;
@@ -77,7 +77,7 @@ function auth_oidc($callback_url = null)
 	// LOGGED IN, so just return.
 	//
 	if (isset($_SESSION['sub'])) {
-		error_log("Already logged in.");
+		error_log("Already authenticated. NetID=".$_SESSION['netid']);
 		return;
 	}
 
@@ -156,6 +156,7 @@ function auth_oidc($callback_url = null)
 			} else {
 				die("Unable to obtain NetID for authenticated session.");
 			}
+			error_log("Successful authentication. NetID=".$_SESSION['netid']);
 
 			header("Location: ". $_SESSION['POST_AUTH_URL']);
 		    die();
