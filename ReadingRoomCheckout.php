@@ -832,9 +832,9 @@ function emailRequest($user, $book)
 		}
 
 		$log=($GLOBALS['DEBUG'] == true ? "DEBUG mode - mail not " : "Mail ")
-			."sent to ".$checkedOutBook[0]['Borrower'];
+			."sent to ".$checkedOutBook[0]['Borrower']." requesting ".$checkedOutBook[0]['Title'].".";
 		error_log($log);
-    	print "Request for <strong>".$checkedOutBook[0]['Title']."</strong> sent.<br>";
+    	print "{$log}<br>";
 	} catch (Exception $e) {
 		$log="Error mailing".$checkedOutBook[0]['Borrower'].": ".$mail->ErrorInfo;
 		error_log($log);
