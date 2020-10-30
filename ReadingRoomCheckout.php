@@ -44,7 +44,7 @@ $black = "<font color=\"#000000\">";
 
 if ($GLOBALS['DEBUG'] == true) {
 	print "<BR>DEBUG mode enabled<BR><UL>"
-		."<LI>Despite messages to the contrary, no email will be sent</LI>"
+		."<LI>Despite messages to the contrary, no email will be sent. I promise.</LI>"
 		."</UL><BR>\n";
 }
 
@@ -637,21 +637,18 @@ function emailBooksOverdue ($user)
 					.$book['Author']
 					."\" because it is overdue.\n\nThank you.";
 
-				if ($GLOBALS['DEBUG'] == true) {
-					// Separate print statements here so stdout if properly 
-					// flushed between prints.
-					error_log("DEBUG mode - not sending mail - ".print_r($mail));
-					print "<pre>DEBUG mode<BR>";
-					print_r($mail);
-					print "</pre>";
-				} else {
-					error_log("Sending mail to ".$book['Borrower']);
+				if ($GLOBALS['DEBUG'] == false) {
 					// DEBUG TEMP //$mail->send();
 				}
 
-				print "Mail sent to ".$book['Borrower']." requesting return of \"".$book['Title']."\".<BR>";
+				$log=($GLOBALS['DEBUG'] == true ? "DEBUG mode - mail not " : "Mail ")
+					."sent to ".$book['Borrower']." requesting return of \"".$book['Title']."\"";
+				error_log($log);
+				print $log."<BR>\n";
 			} catch (Exception $e) {
-				print "<BR>Message to ".$book['Borrower']." could not be sent: {$mail->ErrorInfo}<BR>";
+				$log="Error mailing".$book['Borrower'].": ".$mail->ErrorInfo;
+				error_log($log);
+				print "<BR>{$log}<BR>";
 			} // try/catch
 
         } // foreach
@@ -830,20 +827,18 @@ function emailRequest($user, $book)
            ." is requesting you return \""
            .$checkedOutBook[0]['Title']."\".";
 
-		if ($GLOBALS['DEBUG'] == true) {
-			// Separate print statements here so stdout if properly 
-			// flushed between prints.
-			error_log("DEBUG mode - not sending mail - ".print_r($mail));
-			print "<pre>DEBUG mode<BR>";
-			print_r($mail);
-			print "</pre>";
-		} else {
-			error_log("Sending mail to ".$checkedOutBook[0]['Borrower']);
-			//$mail->send();
+		if ($GLOBALS['DEBUG'] == false) {
+			// DEBUG TEMP //$mail->send();
 		}
+
+		$log=($GLOBALS['DEBUG'] == true ? "DEBUG mode - mail not " : "Mail ")
+			."sent to ".$checkedOutBook[0]['Borrower'];
+		error_log($log);
     	print "Request for <strong>".$checkedOutBook[0]['Title']."</strong> sent.<br>";
 	} catch (Exception $e) {
-		print "<BR>Request could not be sent: {$mail->ErrorInfo}<BR>";
+		$log="Error mailing".$checkedOutBook[0]['Borrower'].": ".$mail->ErrorInfo;
+		error_log($log);
+		print "<BR>{$log}<BR>";
 	} // try/catch
  }
 

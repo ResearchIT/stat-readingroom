@@ -27,9 +27,9 @@ if ($GLOBALS['DEBUG'] == true) {
 print <<<END
 <html>
 <script type="text/javascript">
-		 document.title="People-STAT, ISU"; 
-         showlist('people_home', level=1 ) 
-		 showlist('people_list', level=2 ) 
+		 document.title="People-STAT, ISU";
+         showlist('people_home', level=1 )
+		 showlist('people_list', level=2 )
 </script type="text/javascript">
 
 <h1>Email</h1>
@@ -71,10 +71,10 @@ if(!empty($StaffID)) {
 $allowtypes=array("sas","jmp","zip", "rar", "txt", "doc", "jpg", "png", "gif","odt","xml");
 
 // What priority should the script send the mail? 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
-$priority="3"; 
+$priority="3";
 
 // Should we allow visitors to attach files? How Many? 0 = Do not allow attachments, 1 = allow only 1 file to be attached, 2 = allow two files etc.
-$allowattach="0"; 
+$allowattach="0";
 
 // Maximum file size for attachments in KB NOT Bytes for simplicity. MAKE SURE your php.ini can handel it, post_max_size, upload_max_filesize, file_uploads, max_execution_time!
 // 2048kb = 2MB,       1024kb = 1MB,     512kb = 1/2MB etc..
@@ -85,15 +85,15 @@ $max_file_size="1024";
 $max_file_total="2048";
 
 // Value for the Submit Button
-$submitvalue=" Send Email "; 
+$submitvalue=" Send Email ";
 
 // Value for the Reset Button
 $resetvalue=" Reset Form ";
 
 // Default subject? This will be sent if the user does not type in a subject
-$defaultsubject="No Subject"; 
+$defaultsubject="No Subject";
 
-// Because many requested it, this feature will add a drop down box for the user to select a array of subjects that you specify below. 
+// Because many requested it, this feature will add a drop down box for the user to select a array of subjects that you specify below.
 // True = Use this feature, False = do not use this feature
 
 // This is an array of the email subjects the user can pick from. Make sure you keep the format of this array or you will get errors!
@@ -104,7 +104,7 @@ $subjects[2] = "A Message from Your Reading Room";
 $subjects[3] = "Please return: ".$Book->Title;
 //$subjects[1] = $Book->Title;
 //$subjects[2] = "Please return: ".$Book->Title;
-$use_subject_drop=true;  
+$use_subject_drop=true;
 
 // This is an array of the email address for the array above. There must be an email FOR EACH array value specified above. You can have only 1 department if you want.
 //YOU MUST HAVE THE SAME AMMOUNT OF $subjects and $emails or this WILL NOT work correctly! The emails also must be in order for what you specify above!
@@ -114,7 +114,7 @@ $emails=array($to, $to, $to);
 
 // This is the message that is sent after the email has been sent. You can use html here.
 // If you want to redirect users to another page on your website use this: <script type=\"text/javascript\">window.location=\"http://www.YOUR_URL.com/page.html\";</script>
-$thanksmessage="Thank you! Your email has been sent."; 
+$thanksmessage="Thank you! Your email has been sent.";
 
 //Little bit of security from people forging headers. People are mean sometimes :(
 function clean($key) {
@@ -143,11 +143,11 @@ $sent_mail=false;
 if($_POST['submit']==true) {
 	extract($_POST, EXTR_SKIP);
 
-	if(trim($yourname)=="") { 
+	if(trim($yourname)=="") {
 		$error.="You did not enter your name!<br />";
 	}
-	
-	if(trim($youremail)=="") { 
+
+	if(trim($youremail)=="") {
 		$error.="You did not enter your email!<br />";
 	} elseif(!preg_match("/^([a-z0-9_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,4}\$/i",$youremail)  ) {
 		$error.="Invalid email address.<br />";
@@ -157,21 +157,21 @@ if($_POST['submit']==true) {
 		$emailsubject=$defaultsubject;
 	}
 
-	if(trim($yourmessage)=="") { 
+	if(trim($yourmessage)=="") {
 		$error.="You did not enter a message!<br />";
 	}
-	
+
 	$boundary=md5(uniqid(time()));
-	
+
 	//Little bit of security from people forging headers. People are mean sometimes :(
-	
+
 	$email = explode(",",$to);
 	$myemail = $email[1];
 	$to = $email[0];
 	$yourname=clean($yourname);
 	$yourmessage=clean($yourmessage);
 	$youremail=clean($youremail);
-	
+
 	$mail = new PHPMailer(true);
 	try {
 		// Server Settings
@@ -191,22 +191,21 @@ if($_POST['submit']==true) {
 		$mail->Subject = $emailsubject;
 		$mail->Body = $yourmessage;
 
-		if ($GLOBALS['DEBUG'] == true) {
-			// Separate print statements here so stdout if properly
-			// flushed between prints.
-			error_log("DEBUG mode - not sending mail - ".print_r($mail));
-			print "DEBUG mode - dumping \$mail object<BR><pre>";
-			print_r($mail);
-			print "</pre>";
-		} else {
-			error_log("Sending mail to ".$to);
-			//$mail->send();
+
+		if ($GLOBALS['DEBUG'] == false) {
+			// DEBUG TEMP //$mail->send();
 		}
-		print "Mail sent to {$to}.<BR>";
+
+		$log=($DEBUG == true ? "DEBUG mode - mail not " : "Mail ")
+			."sent to ".$to;
+		error_log($log);
+		print $log."<BR>\n";
+
 		$sent_mail=true;
 	} catch (Exception $e) {
-		exit("<BR>Message to {$to} could not be sent: {$mail->ErrorInfo}<BR>".
-			"Please report this to the website administrator.<BR>");
+		$log="Error sending mail to {$to}: {$mail->ErrorInfo}";
+		error_log($log);
+		exit("<BR>{$log}<BR>Please report this to the website administrator.<BR>");
 	} // try/catch
 
 } // $_POST
@@ -215,7 +214,7 @@ if($_POST['submit']==true) {
 //================================================================================
 //* Start the form layout
 //================================================================================
-//:- Please know what your doing before editing below. Sorry for the stop and 
+//:- Please know what your doing before editing below. Sorry for the stop and
 //start php.. people requested that I use only html for the form.
 
 print <<<END1
@@ -223,21 +222,21 @@ print <<<END1
 var error="";
 e_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
 function Checkit(theform) {
-	
+
 	if(theform.yourname.value=="") {
 		error+="You did not enter your name\n";
 	}
-	
+
 	if(theform.youremail.value=="") {
 		error+="You did not enter your email\n";
 	} else if(!e_regex.test(theform.youremail.value)) {
 		error+="Invalid email address\n";
 	}
-		
+
 	if(theform.yourmessage.value=="") {
 		error+="You did not enter your message\n";
 	}
-	
+
 	if(error) {
 		alert('**The form returned the following errors:**\n\n' + error);
 		error="";
@@ -267,7 +266,7 @@ if($sent_mail != true) {
 <form method="post" action=" $serverSelf " enctype="multipart/form-data" name="phmailer" onsubmit="return Checkit(this);">
 <table align="center" class="table" width="100%">
 END3;
-	
+
 	If($allowattach > 0) {
 		print <<<END4
 		<tr>
@@ -302,7 +301,7 @@ END4;
 	<tr>
 		<td width="30%" class="table_body">Subject:</td>
 		<td width="70%" class="table_body">
-		
+
 END5;
 
 	if($use_subject_drop AND is_array($subjects)) {
@@ -320,13 +319,13 @@ END66;
 		print <<<END67
 					</select>
 END67;
-			
+
 	} else {
-				
+
 		print <<<END7
 				<input name="emailsubject" type="text" size="30" value="$sSpecial" />
 END7;
-			
+
 	} // if($use_subject_drop AND is_array($subjects))
 	print "	</td> </tr>";
 
