@@ -640,11 +640,13 @@ function emailBooksOverdue ($user)
 				if ($DEBUG == true) {
 					// Separate print statements here so stdout if properly 
 					// flushed between prints.
+					error_log("DEBUG mode - not sending mail - ".print_r($mail));
 					print "<pre>DEBUG mode<BR>";
 					print_r($mail);
 					print "</pre>";
 				} else {
-					$mail->send();
+					error_log("Sending mail to ".$book['Borrower']);
+					// DEBUG TEMP //$mail->send();
 				}
 
 				print "Mail sent to ".$book['Borrower']." requesting return of \"".$book['Title']."\".<BR>";
@@ -835,11 +837,13 @@ function emailRequest($user, $book)
 		if ($DEBUG == true) {
 			// Separate print statements here so stdout if properly 
 			// flushed between prints.
+			error_log("DEBUG mode - not sending mail - ".print_r($mail));
 			print "<pre>DEBUG mode<BR>";
 			print_r($mail);
 			print "</pre>";
 		} else {
-			$mail->send();
+			error_log("Sending mail to ".$checkedOutBook[0]['Borrower']);
+			//$mail->send();
 		}
     	print "Request for <strong>".$checkedOutBook[0]['Title']."</strong> sent.<br>";
 	} catch (Exception $e) {

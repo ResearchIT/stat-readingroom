@@ -194,11 +194,13 @@ if($_POST['submit']==true) {
 		if ($DEBUG == true) {
 			// Separate print statements here so stdout if properly
 			// flushed between prints.
+			error_log("DEBUG mode - not sending mail - ".print_r($mail));
 			print "DEBUG mode - dumping \$mail object<BR><pre>";
 			print_r($mail);
 			print "</pre>";
 		} else {
-			$mail->send();
+			error_log("Sending mail to ".$to);
+			//$mail->send();
 		}
 		print "Mail sent to {$to}.<BR>";
 		$sent_mail=true;
