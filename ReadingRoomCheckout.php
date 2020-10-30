@@ -23,10 +23,7 @@ $user = $_SESSION['netid'];
 // If true, enable debugging features.
 $DEBUG = getenv('DEBUG');
 
-// Comma separated string of admin user NetIDs.
-$ADMINS = getenv('ADMINS');
-
-// Is $NetID an admin user?
+// Is user an admin user?
 //
 // Environment variable ADMIN_USERS is a CSV of ISU NetIDs to be granted 
 // "admin" access -- e.g. "doc,ed,johnny" (sans quotes).
@@ -35,8 +32,8 @@ $ADMINS = getenv('ADMINS');
 //
 $adminUser = 0;
 foreach (preg_split("/\s*,\s*/", getenv("ADMIN_USERS"), 0, PREG_SPLIT_NO_EMPTY) as $admin) {
-	if ($admin == $NetID) {
-		error_log("{$NetID} is adminUser");
+	if ($user == $admin) {
+		error_log("{$user} is adminUser");
 		$adminUser = 1;
 		break;
 	}
