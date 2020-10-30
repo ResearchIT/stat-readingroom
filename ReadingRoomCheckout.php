@@ -22,8 +22,25 @@ $user = $_SESSION['netid'];
 
 // If true, enable debugging features.
 $DEBUG = getenv('DEBUG');
-// If not empty, string is a NetID that can also become an admin user.
-$DEBUG_ADMIN = getenv('DEBUG_ADMIN');
+
+// Comma separated string of admin user NetIDs.
+$ADMINS = getenv('ADMINS');
+
+// Is $NetID an admin user?
+//
+// Environment variable ADMIN_USERS is a CSV of ISU NetIDs to be granted 
+// "admin" access -- e.g. "doc,ed,johnny" (sans quotes).
+// This environment variable must be configured in the OpenShift deployment page
+// for this project.
+//
+$adminUser = 0;
+foreach (preg_split("/\s*,\s*/", getenv("ADMIN_USERS"), 0, PREG_SPLIT_NO_EMPTY) as $admin) {
+	if ($admin == $NetID) {
+		error_log("{$NetID} is adminUser");
+		$adminUser = 1;
+		break;
+	}
+}
 
 $red   = "<font color=\"#FF0000\">";
 $black = "<font color=\"#000000\">";
@@ -38,16 +55,6 @@ $sql = "select name from Statdir where netid = '{$user}'";
 $results = simple_query($sql);
 
 $userName = $results[0]['name'];
-
-// Is this an admin user?
-$adminUser = 0;
-if (preg_match("/mbrekke|clabuzze|agadilov|riker|mtjernag/", $user)) {
-    $adminUser = 1;
-}
-
-if ($DEBUG_ADMIN == $user) {
-	$adminUser = 1;
-}
 
 $date = getdate();
 $current_date = $date{'month'}." ".$date{'mday'}.", ".$date{'year'};
