@@ -42,7 +42,7 @@ foreach (preg_split("/\s*,\s*/", getenv("ADMIN_USERS"), 0, PREG_SPLIT_NO_EMPTY) 
 $red   = "<font color=\"#FF0000\">";
 $black = "<font color=\"#000000\">";
 
-if ($DEBUG == true) {
+if ($GLOBALS['DEBUG'] == true) {
 	print "<BR>DEBUG mode enabled<BR><UL>"
 		."<LI>Despite messages to the contrary, no email will be sent</LI>"
 		."</UL><BR>\n";
@@ -637,7 +637,7 @@ function emailBooksOverdue ($user)
 					.$book['Author']
 					."\" because it is overdue.\n\nThank you.";
 
-				if ($DEBUG == true) {
+				if ($GLOBALS['DEBUG'] == true) {
 					// Separate print statements here so stdout if properly 
 					// flushed between prints.
 					error_log("DEBUG mode - not sending mail - ".print_r($mail));
@@ -653,10 +653,6 @@ function emailBooksOverdue ($user)
 			} catch (Exception $e) {
 				print "<BR>Message to ".$book['Borrower']." could not be sent: {$mail->ErrorInfo}<BR>";
 			} // try/catch
-
-			if ($DEBUG == true) {
-				return; // DEBUG - send only one mail
-			}
 
         } // foreach
     } // ($count > 0)
@@ -834,7 +830,7 @@ function emailRequest($user, $book)
            ." is requesting you return \""
            .$checkedOutBook[0]['Title']."\".";
 
-		if ($DEBUG == true) {
+		if ($GLOBALS['DEBUG'] == true) {
 			// Separate print statements here so stdout if properly 
 			// flushed between prints.
 			error_log("DEBUG mode - not sending mail - ".print_r($mail));

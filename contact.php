@@ -18,7 +18,7 @@ auth_oidc($_SERVER['PHP_SELF']);
 
 $DEBUG = getenv('DEBUG');
 
-if ($DEBUG == true) {
+if ($GLOBALS['DEBUG'] == true) {
 	print "<BR>DEBUG mode enabled<BR><UL>"
 		."<LI>Despite messages to the contrary, no email will be sent</LI>"
 		."</UL><BR>\n";
@@ -191,7 +191,7 @@ if($_POST['submit']==true) {
 		$mail->Subject = $emailsubject;
 		$mail->Body = $yourmessage;
 
-		if ($DEBUG == true) {
+		if ($GLOBALS['DEBUG'] == true) {
 			// Separate print statements here so stdout if properly
 			// flushed between prints.
 			error_log("DEBUG mode - not sending mail - ".print_r($mail));
