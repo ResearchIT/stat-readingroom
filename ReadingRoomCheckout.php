@@ -638,7 +638,7 @@ function emailBooksOverdue ($user)
 					."\" because it is overdue.\n\nThank you.";
 
 				if ($GLOBALS['DEBUG'] == false) {
-					// DEBUG TEMP //$mail->send();
+					$mail->send();
 				}
 
 				$log=($GLOBALS['DEBUG'] == true ? "DEBUG mode - mail not " : "Mail ")
@@ -828,7 +828,7 @@ function emailRequest($user, $book)
            .$checkedOutBook[0]['Title']."\".";
 
 		if ($GLOBALS['DEBUG'] == false) {
-			// DEBUG TEMP //$mail->send();
+			$mail->send();
 		}
 
 		$log=($GLOBALS['DEBUG'] == true ? "DEBUG mode - mail not " : "Mail ")

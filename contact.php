@@ -193,7 +193,7 @@ if($_POST['submit']==true) {
 
 
 		if ($GLOBALS['DEBUG'] == false) {
-			// DEBUG TEMP //$mail->send();
+			$mail->send();
 		}
 
 		$log=($DEBUG == true ? "DEBUG mode - mail not " : "Mail ")
