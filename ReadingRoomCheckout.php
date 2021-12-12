@@ -692,11 +692,11 @@ function booksOverdue ($user)
         $table->SetCellContent($row, 6, "<strong>Author</strong>");
 
         foreach ($results as $book) {
-            $sql = "select name from Statdir where netid = '".$book['Borrower']."'";
-            $results = simple_query($sql);
+            //$sql = "select name from Statdir where netid = '".$book['Borrower']."'";
+            //$results = simple_query($sql);
             $bookName = "bookCI_".$book['BookID'];
             $row = $table->AddRow();
-            $table->SetCellContent($row, 1, contact($user, $results[0]['name'], $book['Borrower'], $book['BookID']));
+            $table->SetCellContent($row, 1, contact($user, $book['Borrower'], $book['Borrower'], $book['BookID']));
             $table->SetCellContent($row, 2, $book['DateCheckedOut']);
             $table->SetCellContent($row, 3, $book['DateContacted']);
             if (!empty($book['ContactedID'])) {
@@ -747,10 +747,10 @@ function booksOut()
         $table->SetCellContent($row, 6, "<strong>Renew</strong>");
 
         foreach ($results as $book) {
-            $sql = "select name from Statdir where netid = '".$book['Borrower']."'";
-            $results = simple_query($sql);
+            //$sql = "select name from Statdir where netid = '".$book['Borrower']."'";
+            //$results = simple_query($sql);
             $bookName = "bookCI_".$book['BookID'];
-			$name = $results[0]['name'];
+            $name = $book['Borrower'];
 
             $row = $table->AddRow();
             $content = "<input name='{$bookName}' type='submit' value='Check In'>";
