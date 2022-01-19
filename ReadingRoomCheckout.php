@@ -619,7 +619,8 @@ function emailBooksOverdue ($user)
 			try {
 				// Server Settings
 				//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
-				$mail->Host			= "mailhub.iastate.edu";
+				$mail->SMTPAutoTLS  = false;
+                                $mail->Host			= "mailhub.iastate.edu";
 				$mail->Port			= 25;
 				$mail->SMTPAuth		= false;
 				$mail->isSMTP(); // Send using SMTP.
@@ -811,7 +812,8 @@ function emailRequest($user, $book)
 	try {
 		// Server Settings
 		//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
-		$mail->Host			= "mailhub.iastate.edu";
+		$mail->SMTPAutoTLS  = false;
+                $mail->Host			= "mailhub.iastate.edu";
 		$mail->Port			= 25;
 		$mail->SMTPAuth		= false;
 		$mail->isSMTP(); // Send using SMTP.
