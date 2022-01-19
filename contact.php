@@ -176,9 +176,9 @@ if($_POST['submit']==true) {
 	try {
 		// Server Settings
 		//$mail->SMTPDebug	= SMTP::DEBUG_SERVER;
-		//$mail->SMTPAutoTLS  = false;
+		$mail->SMTPAutoTLS  = false;
                 $mail->Host			= "mailhub.iastate.edu";
-		$mail->Port			= 587;
+		$mail->Port			= 25;
 		$mail->SMTPAuth		= false;
 		$mail->isSMTP(); // Send using SMTP.
 
